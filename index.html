@@ -1,0 +1,2612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PHISHORA — Premium Cybersecurity Intelligence</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="PHISHORA is an editorial-grade cybersecurity suite featuring phishing email heuristics, real-time password strength entropy calculation, global breach verification, and k-anonymity leakage checking.">
+  <meta name="keywords" content="cybersecurity, phishing, password analyzer, email breach check, pwned, hash verification, k-anonymity">
+  <meta name="author" content="PHISHORA">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* CSS Custom Properties for Core Theme */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #fafaf8;
+      --gold-light: #c9a84c;
+      --gold-warm: #e8c96d;
+      --gold-deep: #a8892a;
+      --champagne: #f5edd6;
+      --ivory: #fffdf5;
+      --charcoal: #1a1a1a;
+      --body-text: #4a4a4a;
+      
+      /* Status Colors */
+      --rose: #c0392b;       /* Danger/Critical */
+      --sage: #2e7d52;       /* Success */
+      --amber: #b8860b;      /* Warning */
+      --orange: #e67e22;     /* High Risk */
+      
+      /* Borders & Shadows */
+      --border-gold: #e8c96d;
+      --border-gold-op: rgba(232, 201, 109, 0.4);
+      --shadow-gold: 0 8px 32px rgba(201, 168, 76, 0.08);
+      --shadow-gold-heavy: 0 12px 40px rgba(201, 168, 76, 0.16);
+      --shadow-focus: 0 0 0 3px rgba(201, 168, 76, 0.25);
+      
+      /* Animation Settings */
+      --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --transition-fast: all 0.2s ease;
+    }
+
+    /* Global Resets */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--body-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', serif;
+      color: var(--charcoal);
+      font-weight: 700;
+    }
+
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--gold-light);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-deep);
+    }
+
+    /* Layout Utilities */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Sticky Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-gold-op);
+      padding: 16px 0;
+      transition: var(--transition-smooth);
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      stroke: var(--gold-light);
+      transition: var(--transition-smooth);
+    }
+
+    .brand:hover .brand-logo {
+      transform: scale(1.05) rotate(5deg);
+      stroke: var(--gold-deep);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--gold-deep), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .brand-tagline {
+      font-size: 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--gold-light);
+      margin-top: 2px;
+    }
+
+    /* Settings Control Icon */
+    .settings-trigger {
+      background: none;
+      border: 1px solid var(--border-gold-op);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .settings-trigger:hover {
+      background-color: var(--ivory);
+      border-color: var(--gold-light);
+      transform: rotate(30deg);
+    }
+
+    .settings-trigger svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold-light);
+      transition: var(--transition-smooth);
+    }
+
+    .settings-trigger:hover svg {
+      stroke: var(--gold-deep);
+    }
+
+    /* Frosted Settings Panel */
+    .settings-panel {
+      max-height: 0;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.98);
+      border-bottom: 0 solid var(--border-gold-op);
+      transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1), border-width 0.2s ease;
+      box-shadow: var(--shadow-gold);
+    }
+
+    .settings-panel.open {
+      max-height: 350px;
+      border-bottom: 1px solid var(--border-gold-op);
+    }
+
+    .settings-content {
+      padding: 32px 0;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media(min-width: 768px) {
+      .settings-grid {
+        grid-template-columns: 2fr 1fr;
+        align-items: end;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--charcoal);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .form-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background-color: var(--bg-primary);
+      border: 1px solid rgba(212, 181, 90, 0.6);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--charcoal);
+      transition: var(--transition-smooth);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--gold-light);
+      box-shadow: var(--shadow-focus);
+    }
+
+    .input-icon-right {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-icon-right svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold-light);
+      transition: var(--transition-fast);
+    }
+
+    .input-icon-right:hover svg {
+      stroke: var(--gold-deep);
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: var(--transition-smooth);
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-warm));
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(201, 168, 76, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(201, 168, 76, 0.3);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-primary);
+      color: var(--gold-deep);
+      border: 1px solid var(--border-gold);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--ivory);
+      border-color: var(--gold-deep);
+    }
+
+    /* Tab Navigation */
+    .tabs-wrapper {
+      background-color: var(--bg-primary);
+      border-bottom: 1px solid var(--border-gold-op);
+      position: sticky;
+      top: 73px;
+      z-index: 90;
+    }
+
+    .tabs-container {
+      display: flex;
+      position: relative;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--body-text);
+      background: none;
+      border: none;
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      position: relative;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--body-text);
+      transition: var(--transition-fast);
+    }
+
+    .tab-btn.active {
+      color: var(--gold-deep);
+    }
+
+    .tab-btn.active svg {
+      stroke: var(--gold-deep);
+    }
+
+    /* Sliding Underline */
+    .tab-underline {
+      position: absolute;
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-deep), var(--gold-warm));
+      transition: left 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    /* Main Section Architecture */
+    .main-content {
+      padding: 48px 0 80px 0;
+      background-color: var(--bg-secondary);
+      min-height: calc(100vh - 220px);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeUp 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Grid Layouts for Tools */
+    .tool-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    @media(min-width: 992px) {
+      .tool-layout {
+        grid-template-columns: 1.2fr 1fr;
+      }
+      
+      .tool-layout.wide {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Decorative Accent Section Heading */
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: var(--body-text);
+      margin-bottom: 24px;
+    }
+
+    .section-divider {
+      height: 1px;
+      background-color: var(--border-gold);
+      opacity: 0.4;
+      margin-bottom: 32px;
+    }
+
+    /* Elegant Cards */
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: var(--shadow-gold);
+      transition: var(--transition-smooth);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-gold-heavy);
+    }
+
+    /* Large Textarea for Phishing */
+    .elegant-textarea {
+      width: 100%;
+      height: 250px;
+      padding: 20px;
+      background-color: var(--bg-primary);
+      border: 1px solid rgba(212, 181, 90, 0.6);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--charcoal);
+      resize: vertical;
+      transition: var(--transition-smooth);
+    }
+
+    .elegant-textarea:focus {
+      outline: none;
+      border-color: var(--gold-light);
+      box-shadow: var(--shadow-focus);
+    }
+
+    /* Gauge and Score Visuals */
+    .gauge-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin: 20px 0;
+    }
+
+    .gauge-svg {
+      width: 220px;
+      height: 120px;
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: #f1ebd8;
+      stroke-width: 14;
+      stroke-linecap: round;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1s cubic-bezier(0.25, 0.8, 0.25, 1), stroke 0.5s ease;
+    }
+
+    .gauge-score-value {
+      position: absolute;
+      bottom: 12px;
+      font-family: 'Playfair Display', serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: var(--charcoal);
+      text-align: center;
+    }
+
+    .gauge-score-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--body-text);
+      margin-top: 8px;
+    }
+
+    /* Badging */
+    .indicator-badge-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-warm));
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-left: 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-low {
+      background-color: rgba(46, 125, 82, 0.1);
+      color: var(--sage);
+      border: 1px solid rgba(46, 125, 82, 0.25);
+    }
+
+    .badge-medium {
+      background-color: rgba(184, 134, 11, 0.1);
+      color: var(--amber);
+      border: 1px solid rgba(184, 134, 11, 0.25);
+    }
+
+    .badge-high {
+      background-color: rgba(230, 126, 34, 0.1);
+      color: var(--orange);
+      border: 1px solid rgba(230, 126, 34, 0.25);
+    }
+
+    .badge-critical {
+      background-color: rgba(192, 57, 43, 0.1);
+      color: var(--rose);
+      border: 1px solid rgba(192, 57, 43, 0.25);
+    }
+
+    /* Lists and Cards of Findings */
+    .findings-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .finding-card {
+      background-color: var(--bg-primary);
+      border: 1px solid #f0e6cc;
+      border-left: 4px solid var(--gold-light);
+      border-radius: 6px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      animation: fadeUp 0.4s ease forwards;
+    }
+
+    .finding-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .finding-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    .finding-desc {
+      font-size: 13px;
+      color: var(--body-text);
+    }
+
+    /* Password Segmented Strength Meter */
+    .pw-strength-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .pw-strength-segments {
+      display: flex;
+      gap: 6px;
+      height: 6px;
+    }
+
+    .pw-segment {
+      flex: 1;
+      background-color: #eee9dd;
+      border-radius: 3px;
+      transition: var(--transition-smooth);
+    }
+
+    .pw-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .pw-time-estimate {
+      font-size: 14px;
+      font-family: 'Playfair Display', serif;
+      color: var(--gold-deep);
+      font-weight: 700;
+    }
+
+    /* Bullet lists with Gold Dot Markers */
+    .gold-dot-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .gold-dot-list li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 13.5px;
+      color: var(--body-text);
+    }
+
+    .gold-dot-list li::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 9px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--gold-light);
+    }
+
+    /* Password Generator Section */
+    .generator-box {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-gold-op);
+    }
+
+    .result-styled-box {
+      background-color: var(--bg-secondary);
+      border: 1px dashed var(--gold-light);
+      padding: 16px 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      gap: 12px;
+    }
+
+    .generated-pw {
+      font-family: 'Fira Code', monospace;
+      font-size: 15px;
+      color: var(--charcoal);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    /* Breach Results and Large stats */
+    .breach-stat-value {
+      font-size: 56px;
+      line-height: 1;
+      font-family: 'Playfair Display', serif;
+      font-weight: 800;
+      color: var(--gold-deep);
+      margin-bottom: 4px;
+    }
+
+    .breach-stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--body-text);
+      margin-bottom: 28px;
+    }
+
+    /* Grid of breach cards */
+    .breaches-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      position: relative;
+    }
+
+    @media (min-width: 768px) {
+      .breaches-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .breach-card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-gold-op);
+      border-top: 3px solid var(--gold-light);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      box-shadow: var(--shadow-gold);
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .breach-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .breach-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .breach-date {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-light);
+    }
+
+    .breach-desc {
+      font-size: 13px;
+      color: var(--body-text);
+    }
+
+    .breach-pills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gold-deep);
+      border: 1px solid var(--border-gold-op);
+      background-color: var(--ivory);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* Demo Watermark Overlay */
+    .demo-watermark-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .demo-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-12deg);
+      font-family: 'Playfair Display', serif;
+      font-size: 100px;
+      font-weight: 900;
+      color: rgba(201, 168, 76, 0.04);
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .demo-ribbon {
+      background-color: var(--champagne);
+      color: var(--gold-deep);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border-gold-op);
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    /* HIBP Attribution */
+    .api-attribution {
+      font-size: 12px;
+      font-style: italic;
+      color: var(--body-text);
+      text-align: center;
+      margin-top: 40px;
+      letter-spacing: 0.03em;
+    }
+
+    .api-attribution a {
+      color: var(--gold-deep);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .api-attribution a:hover {
+      text-decoration: underline;
+    }
+
+    /* Privacy and Monospace Hash styles */
+    .privacy-notice {
+      display: flex;
+      gap: 12px;
+      background-color: var(--ivory);
+      border: 1px solid var(--border-gold-op);
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-top: 24px;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--body-text);
+    }
+
+    .privacy-notice svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold-light);
+      flex-shrink: 0;
+    }
+
+    .hash-display-box {
+      background-color: var(--bg-secondary);
+      border: 1px solid rgba(212, 181, 90, 0.3);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      margin: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hash-prefix {
+      color: var(--gold-deep);
+      font-weight: 700;
+    }
+
+    .hash-suffix {
+      color: #9a9a9a;
+      letter-spacing: 2px;
+    }
+
+    /* Methodologies: Accordion Design */
+    .methodology-wrapper {
+      margin-top: 48px;
+      border-top: 1px solid var(--border-gold-op);
+      padding-top: 24px;
+    }
+
+    .accordion-header {
+      width: 100%;
+      background: none;
+      border: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .accordion-header svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--gold-light);
+      transition: var(--transition-smooth);
+    }
+
+    .accordion-header.active svg {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .accordion-body-content {
+      padding: 16px 0 24px 0;
+      font-size: 14px;
+      color: var(--body-text);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Skeleton Loading Display Animation */
+    .skeleton-wrapper {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .skeleton-card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-gold-op);
+      border-radius: 8px;
+      padding: 24px;
+      height: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skeleton-line {
+      height: 14px;
+      background-color: #f1ebd8;
+      border-radius: 4px;
+      position: relative;
+    }
+
+    .skeleton-line-title {
+      width: 40%;
+      height: 20px;
+    }
+
+    .skeleton-line-body-1 {
+      width: 85%;
+    }
+
+    .skeleton-line-body-2 {
+      width: 60%;
+    }
+
+    .skeleton-shimmer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 253, 245, 0.6), transparent);
+      animation: shimmer 1.6s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-gold);
+      border-left: 5px solid var(--gold-light);
+      padding: 16px 24px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-gold-heavy);
+      z-index: 1000;
+      transform: translateY(120px);
+      opacity: 0;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--sage);
+    }
+
+    .toast-message {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--charcoal);
+    }
+
+    /* Footer structure */
+    .footer {
+      background-color: var(--bg-primary);
+      border-top: 1px solid var(--border-gold-op);
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: var(--charcoal);
+    }
+
+    /* Empty state results */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      text-align: center;
+      gap: 16px;
+    }
+
+    .empty-state svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--gold-light);
+      stroke-width: 1;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .empty-desc {
+      font-size: 13.5px;
+      color: var(--body-text);
+      max-width: 280px;
+    }
+
+    /* Clean Card (Success Checkmark) */
+    .clean-card {
+      background-color: var(--bg-primary);
+      border: 1px solid rgba(46, 125, 82, 0.3);
+      border-top: 3px solid var(--sage);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--shadow-gold);
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    .clean-icon-wrapper {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: rgba(46, 125, 82, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clean-icon-wrapper svg {
+      width: 32px;
+      height: 32px;
+      stroke: var(--sage);
+    }
+
+    .clean-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .clean-desc {
+      font-size: 14px;
+      color: var(--body-text);
+      max-width: 400px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="copy-toast" class="toast" role="alert" aria-live="assertive">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+    <div id="toast-text" class="toast-message">Copied ✓</div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container navbar-container">
+      <a href="#" class="brand" aria-label="PHISHORA Home">
+        <!-- SVG Hook & Shield Logo -->
+        <svg class="brand-logo" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 2.5L19.5 5.5V11C19.5 16 16.2 19.8 12 21.2C7.8 19.8 4.5 16 4.5 11V5.5L12 2.5Z" />
+          <circle cx="12" cy="4.5" r="1.2" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 5.7V14C12 17 8.5 17 8.5 14L10 15" />
+        </svg>
+        <div class="brand-text">
+          <span class="brand-name">PHISHORA</span>
+          <span class="brand-tagline">Premium Cybersecurity Intelligence</span>
+        </div>
+      </a>
+      
+      <!-- Settings Panel Trigger Button -->
+      <button id="settings-toggle" class="settings-trigger" aria-label="Toggle HaveIBeenPwned API Settings">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.43l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.991l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.645-.869l.214-1.28z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- SETTINGS SLIDE-DOWN PANEL -->
+  <section id="settings-panel" class="settings-panel" aria-label="Settings configuration panel">
+    <div class="container settings-content">
+      <h3 style="font-size: 18px; margin-bottom: 8px; color: var(--gold-deep)">HaveIBeenPwned Configuration</h3>
+      <p style="font-size: 13.5px; color: var(--body-text); margin-bottom: 20px;">
+        To check breaches in real-time, please configure your private HIBP API Key. Key is stored locally in your browser's LocalStorage. If left blank, PHISHORA will operate in demo mode.
+      </p>
+      <div class="settings-grid">
+        <div class="form-group">
+          <label for="hibp-key-input" class="form-label">HIBP v3 API Key</label>
+          <div class="form-input-wrapper">
+            <input type="password" id="hibp-key-input" class="form-input" placeholder="Enter your HIBP API Key">
+            <button id="toggle-key-visibility" class="input-icon-right" type="button" aria-label="Toggle password visibility">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+          <button id="save-settings" class="btn btn-primary" style="flex: 1;">Save Credentials</button>
+          <button id="clear-settings" class="btn btn-secondary" style="flex: 1;">Clear Key</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB BAR NAVIGATION -->
+  <nav class="tabs-wrapper" aria-label="Tool sections navigation">
+    <div class="container">
+      <div class="tabs-container">
+        <button class="tab-btn active" data-tab="tab-phishing">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+          Phishing Analyzer
+        </button>
+        <button class="tab-btn" data-tab="tab-password">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+          </svg>
+          Password Strength
+        </button>
+        <button class="tab-btn" data-tab="tab-breaches">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 9v.906a2.25 2.25 0 01-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 001.183 1.981l6.478 3.488m8.839 2.51l-4.66-2.51m0 0l-1.023-.55a2.25 2.25 0 00-2.134 0l-1.022.55m4.179 2.51a2.25 2.25 0 01-2.134 0l-4.179-2.51m11.533-9.593l-4.817 2.593a2.25 2.25 0 01-2.134 0L3.386 6.314a2.25 2.25 0 010-3.898l4.816-2.593a2.25 2.25 0 012.134 0l4.817 2.593a2.25 2.25 0 010 3.898z" />
+          </svg>
+          Email Breaches
+        </button>
+        <button class="tab-btn" data-tab="tab-pwb-breaches">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m0-10.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.75c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.57-.598-3.75h-.152c-3.196 0-6.1-1.249-8.25-3.286zm0 13.036h.008v.008H12v-.008z" />
+          </svg>
+          Password Breaches
+        </button>
+        <div id="tab-underline" class="tab-underline"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- ==================== TAB 1: PHISHING ANALYZER ==================== -->
+      <section id="tab-phishing" class="tab-panel active" aria-labelledby="phishing-title">
+        <div class="tool-layout">
+          <div>
+            <h2 id="phishing-title" class="section-title">Phishing Email Analyzer</h2>
+            <p class="section-desc">Heuristically analyze raw email text, headers, and metadata to evaluate social engineering, sender spoofing, and malicious payload signals.</p>
+            <div class="section-divider"></div>
+            
+            <div class="card">
+              <div class="form-group">
+                <label for="phishing-textarea" class="form-label">Email Text / Raw Headers</label>
+                <textarea id="phishing-textarea" class="elegant-textarea" placeholder="Paste the suspicious email contents, body text, or full RFC-822 headers here..."></textarea>
+              </div>
+              <div style="margin-top: 24px; display: flex; justify-content: flex-end;">
+                <button id="analyze-phishing-btn" class="btn btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width:18px; height:18px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  Analyze Content
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size: 22px; margin-bottom: 24px;">Risk Assessment</h3>
+            <div class="card" style="min-height: 420px; display: flex; flex-direction: column;">
+              <div id="phishing-empty-state" class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div class="empty-title">Awaiting Email Data</div>
+                <div class="empty-desc">Input raw body text or headers to calculate real-time threat analysis and heuristics.</div>
+              </div>
+
+              <div id="phishing-results" style="display: none;">
+                <div class="gauge-wrapper">
+                  <svg class="gauge-svg" viewBox="0 0 200 100">
+                    <path class="gauge-bg" d="M 20 90 A 80 80 0 0 1 180 90" />
+                    <path id="gauge-arc-fill" class="gauge-fill" d="M 20 90 A 80 80 0 0 1 180 90" stroke="var(--sage)" />
+                  </svg>
+                  <div id="gauge-value" class="gauge-score-value">0</div>
+                  <div class="gauge-score-label">Risk Rating</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; padding-bottom: 12px; border-bottom: 1px solid var(--border-gold-op)">
+                  <span style="font-weight: 700; color: var(--charcoal); font-size: 15px;">Indicators Found</span>
+                  <span id="indicators-count-badge" class="indicator-badge-circle">0</span>
+                </div>
+
+                <div id="phishing-findings" class="findings-list">
+                  <!-- JS Rendered Finding Cards -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accoridon Methodology -->
+        <div class="methodology-wrapper">
+          <button class="accordion-header" aria-expanded="false" aria-controls="phishing-methodology">
+            <span>Security Methodology & Analysis Logic</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="phishing-methodology" class="accordion-body">
+            <div class="accordion-body-content">
+              <p>PHISHORA's heuristic analysis checks emails for multiple structural and textual anomalies often found in social engineering campaigns:</p>
+              <ul class="gold-dot-list">
+                <li><strong>Urgent Action Signals:</strong> Social engineers rely heavily on immediate threat vectors (e.g. suspension, billing crisis). We weight keywords associated with high urgency or immediate action demands.</li>
+                <li><strong>Sender Enclosure Spoofing:</strong> Attackers often set their "Display Name" to mirror high-integrity entities (e.g., "Chase Bank Operations") while holding a mismatching domain name enclosed in angle brackets.</li>
+                <li><strong>Numeric Host Signatures:</strong> High-integrity web services host their assets under validated domains rather than raw IP addresses inside hyperlinked URLs.</li>
+                <li><strong>Homograph Spoofing (Unicode):</strong> Attackers use visually indistinguishable Unicode lookalikes (Cyrillic equivalents) to bypass traditional spam checkers. Mixed-script detection flags URLs with these lookalikes.</li>
+                <li><strong>Formatting Redundancies:</strong> Punctuation abuse (e.g., !!!) and excessive use of capitalization mimic aggressive call-to-actions, indicating potential fraud.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== TAB 2: PASSWORD ANALYZER ==================== -->
+      <section id="tab-password" class="tab-panel" aria-labelledby="password-title">
+        <div class="tool-layout">
+          <div>
+            <h2 id="password-title" class="section-title">Password Strength Analyzer</h2>
+            <p class="section-desc">Assess the entropy, character variety, keyboard walk patterns, and cryptographic security of your passwords in real-time.</p>
+            <div class="section-divider"></div>
+
+            <div class="card">
+              <div class="form-group">
+                <label for="password-strength-input" class="form-label">Password Under Test</label>
+                <div class="form-input-wrapper">
+                  <input type="password" id="password-strength-input" class="form-input" placeholder="Type or paste password to evaluate...">
+                  <button id="toggle-pw-visibility" class="input-icon-right" type="button" aria-label="Toggle password visibility">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Segmented Strength Meter -->
+              <div class="pw-strength-container">
+                <div class="pw-strength-segments">
+                  <div class="pw-segment"></div>
+                  <div class="pw-segment"></div>
+                  <div class="pw-segment"></div>
+                  <div class="pw-segment"></div>
+                  <div class="pw-segment"></div>
+                </div>
+                <div class="pw-label-row">
+                  <span id="pw-strength-text" style="color: var(--rose);">Enter a password</span>
+                  <span id="pw-crack-estimate" class="pw-time-estimate">—</span>
+                </div>
+              </div>
+
+              <div id="pw-suggestions-wrapper" style="display: none; border-top: 1px solid var(--border-gold-op); margin-top: 24px; padding-top: 16px;">
+                <span style="font-size: 13px; font-weight: 700; color: var(--charcoal); text-transform: uppercase;">Enhancements Needed</span>
+                <ul id="pw-suggestions-list" class="gold-dot-list">
+                  <!-- JS suggestions -->
+                </ul>
+              </div>
+
+              <!-- Strong Password Generator inside password Tab -->
+              <div class="generator-box">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                  <div>
+                    <h4 style="font-size: 16px; font-weight: 700; color: var(--charcoal);">Generate Secure Password</h4>
+                    <p style="font-size: 12px; color: var(--body-text); margin-top: 2px;">Generates a 16-character cryptographically random phrase.</p>
+                  </div>
+                  <button id="generate-pw-btn" class="btn btn-secondary" style="padding: 10px 20px; font-size: 12px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width: 16px; height:16px;">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l-3 3m3-3l3 3" />
+                    </svg>
+                    Generate
+                  </button>
+                </div>
+
+                <div id="generator-result-box" class="result-styled-box" style="display: none;">
+                  <span id="generated-password-value" class="generated-pw">AbCdEfGh1234!@#$</span>
+                  <button id="copy-generated-pw" class="btn btn-secondary" style="padding: 8px 12px; border:none; background:none;" aria-label="Copy generated password to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width: 20px; height:20px; stroke: var(--gold-light);">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size: 22px; margin-bottom: 24px;">Entropy Details</h3>
+            <div class="card" style="min-height: 380px;">
+              <div id="pw-empty-state" class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div class="empty-title">Awaiting Input</div>
+                <div class="empty-desc">Mathematical calculation of Shannon entropy and symbol sets will render as you type.</div>
+              </div>
+
+              <div id="pw-stats-wrapper" style="display: none;">
+                <div class="breach-stat-value" id="pw-entropy-val">0</div>
+                <div class="breach-stat-label">Bits of Shannon Entropy</div>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
+                  <tr style="border-bottom: 1px solid var(--border-gold-op);">
+                    <td style="padding: 12px 0; color: var(--body-text);">Length Under Test</td>
+                    <td id="pw-stat-len" style="text-align: right; font-weight: 700; color: var(--charcoal);">0</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-gold-op);">
+                    <td style="padding: 12px 0; color: var(--body-text);">Alphabet Size (R)</td>
+                    <td id="pw-stat-alphabet" style="text-align: right; font-weight: 700; color: var(--charcoal);">0</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-gold-op);">
+                    <td style="padding: 12px 0; color: var(--body-text);">Estimated Combinations</td>
+                    <td id="pw-stat-combinations" style="text-align: right; font-weight: 700; color: var(--gold-deep); font-family: 'Fira Code', monospace; font-size: 12px;">1.00e+00</td>
+                  </tr>
+                </table>
+
+                <div style="margin-top: 24px; font-size: 13px; color: var(--body-text); background-color: var(--bg-secondary); padding: 16px; border-radius: 6px; border-left: 3px solid var(--gold-light);">
+                  <span style="font-weight: 700; color: var(--charcoal);">Classification:</span>
+                  <span id="pw-stat-desc">Very Weak password. Highly vulnerable to dictionary attacks and computational cracking.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Methodology -->
+        <div class="methodology-wrapper">
+          <button class="accordion-header" aria-expanded="false" aria-controls="pw-methodology">
+            <span>Security Methodology & Analysis Logic</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="pw-methodology" class="accordion-body">
+            <div class="accordion-body-content">
+              <p>Entropy calculations quantify the mathematical randomness and unpredictability of a password string, calculating the search space complexity for an attacker:</p>
+              <ul class="gold-dot-list">
+                <li><strong>Shannon Entropy Equation:</strong> Expressed as $E = L \times \log_2(R)$, where $L$ defines password character length and $R$ quantifies the size of the symbol pool based on character types present.</li>
+                <li><strong>Symbol Sets Pool Sizes ($R$):</strong> Lowercase Letters ($26$), Uppercase Letters ($26$), Numeric Digits ($10$), and Special Symbols ($33$). Including all categories boosts the baseline exponentially.</li>
+                <li><strong>Keyboard Walk Detection:</strong> Detects contiguous spatial progressions across a standard QWERTY keyboard layout (e.g. `qwerty`, `asdf`, `1234`). These represent negligible search spaces for custom password dictionary algorithms.</li>
+                <li><strong>Common Dictionary Filtration:</strong> High entropy can be spoofed by simple, long sequential phrases. PHISHORA intercepts the top 50 worst-performing passwords to prevent falsified high security classifications.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== TAB 3: EMAIL BREACH CHECKER ==================== -->
+      <section id="tab-breaches" class="tab-panel" aria-labelledby="email-breach-title">
+        <div class="tool-layout wide">
+          <div>
+            <h2 id="email-breach-title" class="section-title">Email Breach Checker</h2>
+            <p class="section-desc">Search public catalogs for known credential compromises involving your email address. Supports real-time HIBP API integration and localized Demo sandboxing.</p>
+            <div class="section-divider"></div>
+
+            <div class="card" style="margin-bottom: 32px;">
+              <div class="form-group">
+                <label for="email-breach-input" class="form-label">Email Address to Scan</label>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                  <div class="form-input-wrapper" style="flex: 1; min-width: 250px;">
+                    <input type="email" id="email-breach-input" class="form-input" placeholder="e.g. administrator@corporate.com">
+                  </div>
+                  <button id="check-email-btn" class="btn btn-primary" aria-label="Execute search across database breaches">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width: 18px; height: 18px;">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.636z" />
+                    </svg>
+                    <span>Check Breaches</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- RESULT REGION -->
+            <div id="email-results-card" class="card demo-watermark-container" style="display: none; min-height: 300px;">
+              <div id="demo-watermark-overlay" class="demo-watermark" style="display: none;">DEMO MODE</div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-bottom: 24px;">
+                <div>
+                  <div class="breach-stat-value" id="breach-total-count">0</div>
+                  <div class="breach-stat-label">Total Breaches Found</div>
+                </div>
+                <div id="breach-status-badge" class="demo-ribbon" style="display: none;">Demo Mode active</div>
+              </div>
+
+              <!-- Shimmer Loader Container -->
+              <div id="breach-skeleton" class="skeleton-wrapper">
+                <div class="skeleton-card">
+                  <div class="skeleton-line skeleton-line-title"><div class="skeleton-shimmer"></div></div>
+                  <div class="skeleton-line skeleton-line-body-1"><div class="skeleton-shimmer"></div></div>
+                  <div class="skeleton-line skeleton-line-body-2"><div class="skeleton-shimmer"></div></div>
+                </div>
+                <div class="skeleton-card">
+                  <div class="skeleton-line skeleton-line-title"><div class="skeleton-shimmer"></div></div>
+                  <div class="skeleton-line skeleton-line-body-1"><div class="skeleton-shimmer"></div></div>
+                  <div class="skeleton-line skeleton-line-body-2"><div class="skeleton-shimmer"></div></div>
+                </div>
+              </div>
+
+              <!-- Actual grid of breaches -->
+              <div id="breaches-output-grid" class="breaches-grid">
+                <!-- Javascript will insert cards here -->
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div id="email-empty-state" class="card">
+              <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+                <div class="empty-title">Check Your Identity Exposure</div>
+                <div class="empty-desc">Enter your email address above to inspect database archives for compromised profiles.</div>
+              </div>
+            </div>
+
+            <div class="api-attribution">
+              Powered by <a href="https://haveibeenpwned.com" target="_blank" rel="noopener noreferrer">HaveIBeenPwned API</a>.
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Methodology -->
+        <div class="methodology-wrapper">
+          <button class="accordion-header" aria-expanded="false" aria-controls="email-methodology">
+            <span>Security Methodology & Analysis Logic</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="email-methodology" class="accordion-body">
+            <div class="accordion-body-content">
+              <p>PHISHORA allows direct interface querying against HaveIBeenPwned's comprehensive indices using robust verification standards:</p>
+              <ul class="gold-dot-list">
+                <li><strong>Local Storage API Key:</strong> Your credential data never transits third-party proxies. PHISHORA targets HIBP endpoints strictly inside the local client context, using local browser persistence.</li>
+                <li><strong>Demo Mode Verification:</strong> To enable robust sandbox exploration, users without active HIBP licenses are directed to simulated sandboxed lists illustrating potential exposed records (Canva, Adobe, LinkedIn).</li>
+                <li><strong>Strict Rate-Limiting:</strong> API queries are restricted with local countdown disables (3 seconds) to preserve network integrity and prevent 429 API responses.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ==================== TAB 4: PASSWORD BREACH CHECKER ==================== -->
+      <section id="tab-pwb-breaches" class="tab-panel" aria-labelledby="pwb-title">
+        <div class="tool-layout">
+          <div>
+            <h2 id="pwb-title" class="section-title">Password Breach Checker</h2>
+            <p class="section-desc">Verify if a password has been leaked in known data breaches without ever transmitting the plaintext secret to the internet.</p>
+            <div class="section-divider"></div>
+
+            <div class="card">
+              <div class="form-group" style="margin-bottom: 24px;">
+                <label for="pwb-password-input" class="form-label">Password Under Assessment</label>
+                <div class="form-input-wrapper">
+                  <input type="password" id="pwb-password-input" class="form-input" placeholder="Enter password to check breach leaks...">
+                  <button id="toggle-pwb-visibility" class="input-icon-right" type="button" aria-label="Toggle password visibility">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end;">
+                <button id="check-pwb-btn" class="btn btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width: 18px; height: 18px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                  </svg>
+                  Verify Anonymously
+                </button>
+              </div>
+
+              <div class="privacy-notice">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+                <span>
+                  <strong>Privacy Protocol:</strong> Your password never leaves this browser. We use <strong>k-anonymity</strong> masking via Web Cryptography APIs — only the first 5 characters of your password's SHA-1 hash are ever transmitted to the HaveIBeenPwned database.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="font-size: 22px; margin-bottom: 24px;">Breach Verification</h3>
+            <div class="card" style="min-height: 380px;">
+              <div id="pwb-empty-state" class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.637 10.636z" />
+                </svg>
+                <div class="empty-title">Check Breach Status</div>
+                <div class="empty-desc">Query HIBP range vaults via secure cryptographic hash checking.</div>
+              </div>
+
+              <!-- PWB Shimmer -->
+              <div id="pwb-skeleton" class="skeleton-wrapper">
+                <div class="skeleton-card" style="height: 180px;">
+                  <div class="skeleton-line skeleton-line-title"><div class="skeleton-shimmer"></div></div>
+                  <div class="skeleton-line skeleton-line-body-1"><div class="skeleton-shimmer"></div></div>
+                  <div class="skeleton-line skeleton-line-body-2"><div class="skeleton-shimmer"></div></div>
+                </div>
+              </div>
+
+              <!-- Result Area -->
+              <div id="pwb-results" style="display: none;">
+                <div id="pwb-status-card">
+                  <!-- JS injected status card (rose-tinted or sage/champagne) -->
+                </div>
+
+                <div class="form-label" style="margin-top: 24px;">Educational SHA-1 Map</div>
+                <div class="hash-display-box">
+                  <div>
+                    <span id="pwb-hash-prefix" class="hash-prefix">2AA6E</span>
+                    <span id="pwb-hash-suffix" class="hash-suffix">•••••••••••••••••••••••••••••••••</span>
+                  </div>
+                  <button id="copy-hash-btn" class="btn btn-secondary" style="padding: 6px; border:none; background:none;" aria-label="Copy hash value to clipboard">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" style="width: 18px; height:18px; stroke: var(--gold-light);">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.5H4.875c-.621 0-1.125.504-1.125 1.125v12c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V16.5a9 9 0 00-9-9z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Methodology -->
+        <div class="methodology-wrapper">
+          <button class="accordion-header" aria-expanded="false" aria-controls="pwb-methodology">
+            <span>Security Methodology & Analysis Logic</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="pwb-methodology" class="accordion-body">
+            <div class="accordion-body-content">
+              <p>Secure password compromise calculations leverage advanced Web Cryptography and mathematical range-query interfaces:</p>
+              <ul class="gold-dot-list">
+                <li><strong>Local Cryptographic Hashing:</strong> Plaintext passphrases entered here are immediately converted to a hexadecimal SHA-1 string inside the browser using standard `SubtleCrypto` digests, never reaching the external network interface in plain format.</li>
+                <li><strong>K-Anonymity Partial Masking:</strong> The first 5 characters of the hex hash (representing a pool of $1,048,576$ different possibilities) are transmitted to the API endpoint. HIBP returns a subset of all matching partial suffixes and their leakage frequency.</li>
+                <li><strong>Zero Knowledge Suffix Auditing:</strong> The browser parses the returned suffix records locally and checks for a exact suffix match. This prevents any third-party observers from identifying the specific credential checked.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-text">PHISHORA © 2025 · For educational and security awareness purposes only</p>
+    </div>
+  </footer>
+
+  <!-- ==================== WEB APP JAVASCRIPT ==================== -->
+  <script>
+    // ----------------------------------------------------
+    // GLOBAL STATE & STORAGE CONFIGURATION
+    // ----------------------------------------------------
+    const STATE = {
+      hibpKey: localStorage.getItem('phishora_hibp_key') || '',
+      currentTab: 'tab-phishing',
+      fullSha1Hash: '' // Store computed SHA1 for PWB tab
+    };
+
+    // ----------------------------------------------------
+    // TOAST SYSTEM
+    // ----------------------------------------------------
+    function showToast(message, isSuccess = true) {
+      const toast = document.getElementById('copy-toast');
+      const toastText = document.getElementById('toast-text');
+      toastText.innerText = message;
+      
+      const svg = toast.querySelector('svg');
+      if (isSuccess) {
+        svg.style.stroke = 'var(--sage)';
+      } else {
+        svg.style.stroke = 'var(--rose)';
+      }
+
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    function copyToClipboard(text, entityName = "Content") {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`${entityName} copied to clipboard ✓`);
+      }).catch(err => {
+        console.error('Error copying text: ', err);
+      });
+    }
+
+    // ----------------------------------------------------
+    // SETTINGS CONTROL SYSTEM
+    // ----------------------------------------------------
+    const settingsToggle = document.getElementById('settings-toggle');
+    const settingsPanel = document.getElementById('settings-panel');
+    const hibpKeyInput = document.getElementById('hibp-key-input');
+    const saveSettingsBtn = document.getElementById('save-settings');
+    const clearSettingsBtn = document.getElementById('clear-settings');
+    const toggleKeyVisibility = document.getElementById('toggle-key-visibility');
+
+    // Populate key in settings input on load
+    if (STATE.hibpKey) {
+      hibpKeyInput.value = STATE.hibpKey;
+    }
+
+    settingsToggle.addEventListener('click', () => {
+      settingsPanel.classList.toggle('open');
+      const isExpanded = settingsPanel.classList.contains('open');
+      settingsToggle.setAttribute('aria-expanded', isExpanded);
+    });
+
+    toggleKeyVisibility.addEventListener('click', () => {
+      const type = hibpKeyInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      hibpKeyInput.setAttribute('type', type);
+      const icon = toggleKeyVisibility.querySelector('svg');
+      if (type === 'text') {
+        // Change SVG to slashed eye icon
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />';
+      } else {
+        // Restore normal eye icon
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />';
+      }
+    });
+
+    saveSettingsBtn.addEventListener('click', () => {
+      const keyVal = hibpKeyInput.value.trim();
+      STATE.hibpKey = keyVal;
+      localStorage.setItem('phishora_hibp_key', keyVal);
+      showToast("Credentials saved locally ✓");
+      settingsPanel.classList.remove('open');
+      updateBreachUIForDemoStatus();
+    });
+
+    clearSettingsBtn.addEventListener('click', () => {
+      STATE.hibpKey = '';
+      hibpKeyInput.value = '';
+      localStorage.removeItem('phishora_hibp_key');
+      showToast("Credentials cleared ✓");
+      settingsPanel.classList.remove('open');
+      updateBreachUIForDemoStatus();
+    });
+
+    // ----------------------------------------------------
+    // TAB SELECTION & ANIMATED UNDERLINE
+    // ----------------------------------------------------
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabUnderline = document.getElementById('tab-underline');
+
+    function positionTabUnderline() {
+      const activeTab = document.querySelector('.tab-btn.active');
+      if (activeTab) {
+        tabUnderline.style.left = `${activeTab.offsetLeft}px`;
+        tabUnderline.style.width = `${activeTab.offsetWidth}px`;
+      }
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        positionTabUnderline();
+
+        const targetTab = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+          panel.classList.remove('active');
+        });
+        document.getElementById(targetTab).classList.add('active');
+        STATE.currentTab = targetTab;
+      });
+    });
+
+    // Handle initial underline positioning and dynamic window resize
+    window.addEventListener('load', () => {
+      setTimeout(positionTabUnderline, 100);
+      updateBreachUIForDemoStatus();
+    });
+    window.addEventListener('resize', positionTabUnderline);
+
+    // ----------------------------------------------------
+    // ACCORDION CONTROLS (METHODOLOGY SECTION)
+    // ----------------------------------------------------
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    accordionHeaders.forEach(header => {
+      header.addEventListener('click', () => {
+        header.classList.toggle('active');
+        const content = document.getElementById(header.getAttribute('aria-controls'));
+        const isExpanded = header.classList.contains('active');
+        header.setAttribute('aria-expanded', isExpanded);
+        
+        if (isExpanded) {
+          content.style.maxHeight = `${content.scrollHeight}px`;
+        } else {
+          content.style.maxHeight = '0px';
+        }
+      });
+    });
+
+    // ----------------------------------------------------
+    // TOOL 1: PHISHING EMAIL ANALYZER LOGIC
+    // ----------------------------------------------------
+    const phishingTextarea = document.getElementById('phishing-textarea');
+    const analyzePhishingBtn = document.getElementById('analyze-phishing-btn');
+    const phishingEmptyState = document.getElementById('phishing-empty-state');
+    const phishingResults = document.getElementById('phishing-results');
+    const gaugeArcFill = document.getElementById('gauge-arc-fill');
+    const gaugeValue = document.getElementById('gauge-value');
+    const indicatorsCountBadge = document.getElementById('indicators-count-badge');
+    const phishingFindingsContainer = document.getElementById('phishing-findings');
+
+    analyzePhishingBtn.addEventListener('click', analyzePhishing);
+
+    function analyzePhishing() {
+      const emailContent = phishingTextarea.value.trim();
+      if (!emailContent) {
+        showToast("Please enter email text to analyze", false);
+        return;
+      }
+
+      // Hide empty state and show results panel
+      phishingEmptyState.style.display = 'none';
+      phishingResults.style.display = 'block';
+
+      let score = 0;
+      const findings = [];
+
+      // 1. Keyword Scanning (Case insensitive checks)
+      const keywords = [
+        { word: "urgent", weight: 15, desc: "Demand for high priority urgency flags potential phishing." },
+        { word: "verify your account", weight: 20, desc: "Standard credential harvesting call to action." },
+        { word: "click here", weight: 10, desc: "Generic directive bypasses security details." },
+        { word: "limited time", weight: 12, desc: "Artificially induced psychological anxiety." },
+        { word: "suspend", weight: 18, desc: "Fear tactics indicating immediate account suspension." },
+        { word: "unusual activity", weight: 15, desc: "Security alerts frequently spoofed by social engineers." },
+        { word: "confirm identity", weight: 20, desc: "Requests verification to harvest data targets." },
+        { word: "prize", weight: 15, desc: "Unrealistic positive rewards signify lottery scamming." },
+        { word: "lottery", weight: 18, desc: "Classic financial phishing hooks." },
+        { word: "wire transfer", weight: 20, desc: "Solicitations of direct capital movements represent extreme danger." },
+        { word: "action required", weight: 10, desc: "Generic operational warning flags urgency signals." },
+        { word: "billing issue", weight: 15, desc: "Payment crisis triggers quick link validation redirects." }
+      ];
+
+      keywords.forEach(k => {
+        const regex = new RegExp(`\\b${k.word}\\b`, 'gi');
+        if (regex.test(emailContent)) {
+          score += k.weight;
+          findings.push({
+            title: `Suspicious Phrase Detected: "${k.word}"`,
+            severity: k.weight >= 18 ? 'HIGH' : 'MEDIUM',
+            desc: k.desc
+          });
+        }
+      });
+
+      // 2. Enclosure / Sender Spoofing Check: From Display vs Actual Mail Mismatch
+      // Match pattern like: From: "Chase Operations" <spammer@freehost.ru>
+      const fromRegex = /From:\s*["']?([^"'\n]+)["']?\s*<([^>\n]+)>/i;
+      const match = fromRegex.exec(emailContent);
+      if (match) {
+        const displayName = match[1].toLowerCase();
+        const senderEmail = match[2].toLowerCase();
+        const domainMatch = /@([a-z0-9.-]+)/.exec(senderEmail);
+        const domain = domainMatch ? domainMatch[1] : '';
+
+        // Known high-integrity brand terms to check
+        const brandNames = ["chase", "paypal", "google", "apple", "amazon", "netflix", "bankofamerica", "wellsfargo", "microsoft"];
+        let matchedBrand = brandNames.find(brand => displayName.includes(brand));
+        
+        if (matchedBrand) {
+          // Verify if domain contains the brand name. If not, it is spoofed.
+          if (!domain.includes(matchedBrand)) {
+            score += 35;
+            findings.push({
+              title: "Sender Display Name Mismatch",
+              severity: 'CRITICAL',
+              desc: `Display Name refers to "${matchedBrand.toUpperCase()}", but the actual email domain is "${domain}", indicating severe impersonation spoofing.`
+            });
+          }
+        }
+      }
+
+      // 3. Numeric URL Host Checks (e.g. http://192.168.1.1/login)
+      const ipUrlRegex = /https?:\/\/\b(?:\d{1,3}\.){3}\d{1,3}\b/g;
+      if (ipUrlRegex.test(emailContent)) {
+        score += 30;
+        findings.push({
+          title: "IP Address Hosts Detected",
+          severity: 'CRITICAL',
+          desc: "Links contains numeric IP addresses rather than validated text domain mappings, indicating hosted malicious assets."
+        });
+      }
+
+      // 4. Homograph Spoofing (Mixed-Script Cyrillic Characters inside URLs)
+      // Check for Cyrillic lookalike symbols: а, е, о, р, с, у, х (typically in latin contexts)
+      const cyrillicLookalikes = /[\u0430\u0435\u043e\u0440\u0441\u0443\u0445]/g;
+      const urls = emailContent.match(/https?:\/\/[^\s]+/g) || [];
+      let homographFound = false;
+      urls.forEach(url => {
+        if (cyrillicLookalikes.test(url)) {
+          homographFound = true;
+        }
+      });
+      if (homographFound) {
+        score += 30;
+        findings.push({
+          title: "Homograph Attack Detected",
+          severity: 'CRITICAL',
+          desc: "A hyperlink uses indistinguishable Unicode glyphs (mixed script Cyrillic characters) to fake authorized domain representations."
+        });
+      }
+
+      // 5. Tone & Formatting Checks: ALL CAPS and excessive exclamation marks
+      const exclamationCount = (emailContent.match(/!/g) || []).length;
+      if (exclamationCount >= 4) {
+        score += 8;
+        findings.push({
+          title: "Aggressive Punctuation Tone",
+          severity: 'LOW',
+          desc: `Contains ${exclamationCount} exclamation marks, attempting to trigger panic or hurried action.`
+        });
+      }
+
+      const words = emailContent.split(/\s+/).filter(w => w.length > 4);
+      if (words.length > 5) {
+        const uppercaseWords = words.filter(w => w === w.toUpperCase() && /^[A-Z]+$/.test(w));
+        const capsRatio = uppercaseWords.length / words.length;
+        if (capsRatio >= 0.15) {
+          score += 10;
+          findings.push({
+            title: "Excessive ALL CAPS Messaging",
+            severity: 'MEDIUM',
+            desc: `Over ${(capsRatio * 100).toFixed(0)}% of long words are fully capitalized, faking high system urgency.`
+          });
+        }
+      }
+
+      // Score range validation
+      score = Math.min(score, 100);
+
+      // Render Dynamic SVG Arc gauge
+      // Stroke-dashoffset for semi-circle arc length 283 (max at 0, min at 283). Offset represents unused length.
+      // So score 0 = 283 offset, score 100 = 141 offset (covers 180 degrees)
+      // Actually standard full circle is 2 * pi * r.
+      // If R=45, C = 283. Arc path length is ~251.
+      // Let's map score directly: offset = 283 - (score / 100) * 251.
+      const offsetVal = 283 - (score / 100) * 251;
+      gaugeArcFill.style.strokeDashoffset = offsetVal;
+
+      // Color coding arc gauge & score text
+      let colorClass = 'var(--sage)';
+      if (score > 60) {
+        colorClass = 'var(--rose)';
+      } else if (score > 35) {
+        colorClass = 'var(--orange)';
+      } else if (score > 15) {
+        colorClass = 'var(--amber)';
+      }
+      gaugeArcFill.style.stroke = colorClass;
+      gaugeValue.style.color = colorClass;
+      gaugeValue.innerText = score;
+
+      // Render Findings Cards List
+      indicatorsCountBadge.innerText = findings.length;
+      phishingFindingsContainer.innerHTML = '';
+
+      if (findings.length === 0) {
+        phishingFindingsContainer.innerHTML = `
+          <div class="clean-card" style="padding: 24px; box-shadow:none; border: 1px solid var(--border-gold-op)">
+            <div class="clean-icon-wrapper" style="width:40px; height:40px;">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:24px; height:24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </div>
+            <div class="clean-title" style="font-size:16px;">Zero High-Risk Indictors</div>
+            <div class="clean-desc" style="font-size:13px; max-width:100%;">Email content exhibits standard linguistic phrasing and correct sender verification mappings.</div>
+          </div>
+        `;
+      } else {
+        findings.forEach(f => {
+          let badgeClass = 'badge-low';
+          if (f.severity === 'CRITICAL') badgeClass = 'badge-critical';
+          else if (f.severity === 'HIGH') badgeClass = 'badge-high';
+          else if (f.severity === 'MEDIUM') badgeClass = 'badge-medium';
+
+          const card = document.createElement('div');
+          card.className = 'finding-card';
+          
+          let leftColor = 'var(--sage)';
+          if (f.severity === 'CRITICAL') leftColor = 'var(--rose)';
+          else if (f.severity === 'HIGH') leftColor = 'var(--orange)';
+          else if (f.severity === 'MEDIUM') leftColor = 'var(--amber)';
+          card.style.borderLeftColor = leftColor;
+
+          card.innerHTML = `
+            <div class="finding-card-header">
+              <span class="finding-title">${f.title}</span>
+              <span class="badge ${badgeClass}">${f.severity}</span>
+            </div>
+            <p class="finding-desc">${f.desc}</p>
+          `;
+          phishingFindingsContainer.appendChild(card);
+        });
+      }
+    }
+
+
+    // ----------------------------------------------------
+    // TOOL 2: PASSWORD STRENGTH ANALYZER LOGIC
+    // ----------------------------------------------------
+    const passwordInput = document.getElementById('password-strength-input');
+    const togglePwVisibility = document.getElementById('toggle-pw-visibility');
+    const pwStrengthText = document.getElementById('pw-strength-text');
+    const pwCrackEstimate = document.getElementById('pw-crack-estimate');
+    const pwSuggestionsWrapper = document.getElementById('pw-suggestions-wrapper');
+    const pwSuggestionsList = document.getElementById('pw-suggestions-list');
+    const pwEmptyState = document.getElementById('pw-empty-state');
+    const pwStatsWrapper = document.getElementById('pw-stats-wrapper');
+
+    const pwEntropyVal = document.getElementById('pw-entropy-val');
+    const pwStatLen = document.getElementById('pw-stat-len');
+    const pwStatAlphabet = document.getElementById('pw-stat-alphabet');
+    const pwStatCombinations = document.getElementById('pw-stat-combinations');
+    const pwStatDesc = document.getElementById('pw-stat-desc');
+
+    const generatePwBtn = document.getElementById('generate-pw-btn');
+    const generatorResultBox = document.getElementById('generator-result-box');
+    const generatedPasswordVal = document.getElementById('generated-password-value');
+    const copyGeneratedPwBtn = document.getElementById('copy-generated-pw');
+
+    passwordInput.addEventListener('input', checkPasswordStrength);
+
+    togglePwVisibility.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      const icon = togglePwVisibility.querySelector('svg');
+      if (type === 'text') {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />';
+      } else {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />';
+      }
+    });
+
+    const TOP_50_COMMON_PASSWORDS = new Set([
+      "password", "123456", "123456789", "12345678", "12345", "qwerty", "password123", "admin", "letmein", "1234567",
+      "123123", "111111", "monkey", "iloveyou", "charlie", "admin123", "sunshine", "dragon", "welcome", "football",
+      "secret", "master", "cisco", "trustnoone", "oracle", "database", "windows", "microsoft", "security", "cyber",
+      "phishora", "computer", "qwertyuiop", "asdfghjkl", "zxcvbnm", "keyboard", "princess", "superman", "shadow", "killer",
+      "joshua", "single", "hunter2", "michael", "thomas", "jessica", "starwars", "freedom", "beautiful", "mustang"
+    ]);
+
+    function checkPasswordStrength() {
+      const pw = passwordInput.value;
+      
+      if (!pw) {
+        // Reset view
+        pwEmptyState.style.display = 'flex';
+        pwStatsWrapper.style.display = 'none';
+        pwSuggestionsWrapper.style.display = 'none';
+        pwStrengthText.innerText = 'Enter a password';
+        pwStrengthText.style.color = 'var(--rose)';
+        pwCrackEstimate.innerText = '—';
+        document.querySelectorAll('.pw-segment').forEach(s => s.style.backgroundColor = '#eee9dd');
+        return;
+      }
+
+      pwEmptyState.style.display = 'none';
+      pwStatsWrapper.style.display = 'block';
+
+      const L = pw.length;
+      let R = 0;
+      const suggestions = [];
+
+      // Variety audit
+      const hasLower = /[a-z]/.test(pw);
+      const hasUpper = /[A-Z]/.test(pw);
+      const hasDigit = /[0-9]/.test(pw);
+      const hasSpecial = /[^a-zA-Z0-9]/.test(pw);
+
+      if (hasLower) R += 26;
+      else suggestions.push("Add lowercase letters (a-z) to diversify alphabet.");
+
+      if (hasUpper) R += 26;
+      else suggestions.push("Add uppercase letters (A-Z) to increase search space.");
+
+      if (hasDigit) R += 10;
+      else suggestions.push("Include numeric digits (0-9) to strengthen character variations.");
+
+      if (hasSpecial) R += 33; // standard keyboard symbols
+      else suggestions.push("Integrate special symbols (e.g. @, !, $, %) for complex combinations.");
+
+      // Key walk patterns check
+      const keyboardWalks = ["qwerty", "asdf", "zxcv", "12345", "qaz", "wsx", "edc", "rfv", "tgb"];
+      let hasWalk = false;
+      keyboardWalks.forEach(walk => {
+        if (pw.toLowerCase().includes(walk)) {
+          hasWalk = true;
+        }
+      });
+      if (hasWalk) {
+        suggestions.push("Avoid spatial keyboard walks (e.g. 'qwerty' or 'asdf').");
+      }
+
+      // Repetitions and serial sequences check
+      const repetitionsRegex = /(.)\1{3,}/; // 4+ repeating chars
+      if (repetitionsRegex.test(pw)) {
+        suggestions.push("Eliminate contiguous character repetitions (e.g., 'aaaa' or '1111').");
+      }
+
+      // Common dictionary comparison
+      const lowerPw = pw.toLowerCase();
+      let isCommon = TOP_50_COMMON_PASSWORDS.has(lowerPw);
+      if (isCommon) {
+        suggestions.push("Expose risk: Password matches widely exposed global dictionaries.");
+      }
+
+      // Calculate Shannon Entropy
+      // R should default to 1 if no character sets were calculated
+      const poolSize = R || 1;
+      const entropy = L * Math.log2(poolSize);
+
+      // Render score categories & 5-segment bar
+      let scoreRating = 0; // 0 to 5
+      
+      if (L < 8) scoreRating = 1; // Extremely Weak
+      else if (entropy < 28) scoreRating = 1;
+      else if (entropy < 40) scoreRating = 2;
+      else if (entropy < 60) scoreRating = 3;
+      else if (entropy < 80) scoreRating = 4;
+      else scoreRating = 5;
+
+      // Penalize common patterns heavily
+      if (isCommon) {
+        scoreRating = 1;
+      }
+
+      // Populate Strength Meter segments
+      const segments = document.querySelectorAll('.pw-segment');
+      const colors = ['var(--rose)', 'var(--amber)', 'var(--gold-light)', 'var(--gold-warm)', 'var(--sage)'];
+      const activeColor = colors[scoreRating - 1];
+
+      segments.forEach((seg, index) => {
+        if (index < scoreRating) {
+          seg.style.backgroundColor = activeColor;
+        } else {
+          seg.style.backgroundColor = '#eee9dd';
+        }
+      });
+
+      // Classification outputs
+      let label = 'Very Weak';
+      let desc = 'Highly vulnerable. Easily cracked in minutes using basic dictionary tools.';
+      if (scoreRating === 2) {
+        label = 'Weak';
+        desc = 'Vulnerable to localized brute-forcing. Lengthen the phrase to improve immunity.';
+      } else if (scoreRating === 3) {
+        label = 'Fair';
+        desc = 'Adequate defense. Incorporate random capitals and symbols to prevent easy hashing.';
+      } else if (scoreRating === 4) {
+        label = 'Strong';
+        desc = 'Strong security rating. Resistant to mainstream computational attacks.';
+      } else if (scoreRating === 5) {
+        label = 'Very Strong';
+        desc = 'Cryptographically secure. Impenetrable against standard algorithmic dictionary cracking.';
+      }
+
+      pwStrengthText.innerText = label;
+      pwStrengthText.style.color = activeColor;
+
+      // Math combos representation
+      const combos = Math.pow(poolSize, L);
+      let exponentialRep = combos.toExponential(2);
+
+      // Estimate Brute Force time
+      // Assuming a network rig checks 10^10 hashes per second:
+      const crackSeconds = combos / 1e10;
+      let timeString = 'Instantly';
+      if (crackSeconds > 31536000 * 1000000) timeString = 'Millions of Years';
+      else if (crackSeconds > 31536000 * 100) timeString = 'Centuries';
+      else if (crackSeconds > 31536000) timeString = `${(crackSeconds / 31536000).toFixed(0)} Years`;
+      else if (crackSeconds > 86400) timeString = `${(crackSeconds / 86400).toFixed(0)} Days`;
+      else if (crackSeconds > 3600) timeString = `${(crackSeconds / 3600).toFixed(0)} Hours`;
+      else if (crackSeconds > 60) timeString = 'Minutes';
+
+      if (isCommon) {
+        timeString = 'Instantly';
+        desc = 'CRITICAL VULNERABILITY: This password is blacklisted in standard leakage lists. Brute forced in zero-knowledge space.';
+      }
+
+      pwCrackEstimate.innerText = timeString;
+
+      // Populate details table
+      pwEntropyVal.innerText = entropy.toFixed(1);
+      pwStatLen.innerText = L;
+      pwStatAlphabet.innerText = poolSize;
+      pwStatCombinations.innerText = exponentialRep;
+      pwStatDesc.innerText = desc;
+
+      // Render suggestions
+      if (suggestions.length > 0) {
+        pwSuggestionsWrapper.style.display = 'block';
+        pwSuggestionsList.innerHTML = '';
+        suggestions.forEach(s => {
+          const li = document.createElement('li');
+          li.innerText = s;
+          pwSuggestionsList.appendChild(li);
+        });
+      } else {
+        pwSuggestionsWrapper.style.display = 'none';
+      }
+    }
+
+    // Cryptographically Secure Password Generator
+    generatePwBtn.addEventListener('click', () => {
+      const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=";
+      const len = 16;
+      let pw = "";
+      const randomValues = new Uint32Array(len);
+      window.crypto.getRandomValues(randomValues);
+      
+      for (let i = 0; i < len; i++) {
+        pw += charset[randomValues[i] % charset.length];
+      }
+
+      // Ensure it contains at least one of each to avoid theoretical edge-cases
+      if (!/[a-z]/.test(pw) || !/[A-Z]/.test(pw) || !/[0-9]/.test(pw) || !/[^a-zA-Z0-9]/.test(pw)) {
+        // Simple recursion limit to ensure robustness
+        generatePwBtn.click();
+        return;
+      }
+
+      generatorResultBox.style.display = 'flex';
+      generatedPasswordVal.innerText = pw;
+      showToast("Secure password generated ✓");
+    });
+
+    copyGeneratedPwBtn.addEventListener('click', () => {
+      copyToClipboard(generatedPasswordVal.innerText, "Generated Password");
+    });
+
+
+    // ----------------------------------------------------
+    // TOOL 3: EMAIL BREACH CHECKER LOGIC
+    // ----------------------------------------------------
+    const emailInput = document.getElementById('email-breach-input');
+    const checkEmailBtn = document.getElementById('check-email-btn');
+    const emailEmptyState = document.getElementById('email-empty-state');
+    const emailResultsCard = document.getElementById('email-results-card');
+    const breachTotalCountVal = document.getElementById('breach-total-count');
+    const breachesOutputGrid = document.getElementById('breaches-output-grid');
+    const breachSkeleton = document.getElementById('breach-skeleton');
+    const demoWatermark = document.getElementById('demo-watermark-overlay');
+    const breachStatusBadge = document.getElementById('breach-status-badge');
+
+    checkEmailBtn.addEventListener('click', checkEmailBreach);
+
+    function updateBreachUIForDemoStatus() {
+      if (STATE.hibpKey) {
+        demoWatermark.style.display = 'none';
+        breachStatusBadge.innerText = 'Connected';
+        breachStatusBadge.className = 'demo-ribbon';
+        breachStatusBadge.style.backgroundColor = 'rgba(46, 125, 82, 0.1)';
+        breachStatusBadge.style.borderColor = 'rgba(46, 125, 82, 0.2)';
+        breachStatusBadge.style.color = 'var(--sage)';
+      } else {
+        demoWatermark.style.display = 'block';
+        breachStatusBadge.innerText = 'DEMO SANDBOX';
+        breachStatusBadge.className = 'demo-ribbon';
+        breachStatusBadge.style.backgroundColor = 'var(--champagne)';
+        breachStatusBadge.style.borderColor = 'var(--border-gold-op)';
+        breachStatusBadge.style.color = 'var(--gold-deep)';
+      }
+    }
+
+    function checkEmailBreach() {
+      const email = emailInput.value.trim();
+      
+      // Basic Email Validation Regex
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailRegex.test(email)) {
+        showToast("Please enter a valid email format", false);
+        return;
+      }
+
+      // Hide standard empty state & show output window in loading stage
+      emailEmptyState.style.display = 'none';
+      emailResultsCard.style.display = 'block';
+      breachesOutputGrid.style.display = 'none';
+      breachSkeleton.style.display = 'flex';
+      breachStatusBadge.style.display = 'none';
+
+      // Start countdown rate limit
+      triggerRateLimitCountdown();
+
+      if (STATE.hibpKey) {
+        // Query live HIBP API
+        fetch(`https://haveibeenpwned.com/api/v3/breachedaccount/${encodeURIComponent(email)}?truncateResponse=false`, {
+          headers: {
+            'hibp-api-key': STATE.hibpKey,
+            'user-agent': 'PHISHORA App'
+          }
+        })
+        .then(response => {
+          if (response.status === 404) {
+            // No breaches found
+            return [];
+          }
+          if (response.status === 401) {
+            throw new Error("401: Unauthorized API key. Check settings credentials.");
+          }
+          if (response.status === 429) {
+            throw new Error("429: Too Many Requests. API Rate-limit exceeded.");
+          }
+          if (!response.ok) {
+            throw new Error(`System Error: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          renderBreachResults(data, false);
+        })
+        .catch(err => {
+          console.error(err);
+          showToast(err.message, false);
+          renderErrorCard(err.message);
+        });
+      } else {
+        // Trigger simulated Demo Mode in a smooth asynchronous delay
+        setTimeout(() => {
+          const simulatedBreaches = [
+            {
+              Name: "Canva",
+              BreachDate: "2019-05-24",
+              Description: "In May 2019, the graphic design tool Canva suffered a data breach that impacted 137 million subscribers. The exposed data catalog contained email mappings, cryptographic bcrypt password signatures, and actual real names.",
+              DataClasses: ["Email addresses", "Passwords", "Usernames", "Names"]
+            },
+            {
+              Name: "LinkedIn",
+              BreachDate: "2021-06-22",
+              Description: "In mid-2021, an archive containing profile records scraped from 700 million LinkedIn accounts was posted on a popular hacker forum. The leaked data contained corporate phone profiles, user emails, and physical industry descriptors.",
+              DataClasses: ["Email addresses", "Phone numbers", "Job titles", "Geographic locations"]
+            },
+            {
+              Name: "Adobe",
+              BreachDate: "2013-10-04",
+              Description: "In October 2013, Adobe systems reported a massive server database intrusion containing millions of profile keys. The attack resulted in the leak of username mappings, cryptographically salted SHA-256 signatures, and security hints.",
+              DataClasses: ["Email addresses", "Passwords", "Usernames", "Password hints"]
+            }
+          ];
+
+          // Special clean email case for demonstration purposes
+          if (email === "clean@phishora.com" || email === "secure@phishora.com" || email.includes("safe")) {
+            renderBreachResults([], true);
+          } else {
+            renderBreachResults(simulatedBreaches, true);
+          }
+        }, 1200);
+      }
+    }
+
+    function triggerRateLimitCountdown() {
+      checkEmailBtn.disabled = true;
+      let countdown = 3;
+      const originalText = checkEmailBtn.innerHTML;
+      
+      const interval = setInterval(() => {
+        checkEmailBtn.innerHTML = `
+          <svg class="animate-spin" style="width:16px; height:16px; stroke: #fff;" fill="none" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" style="opacity: 0.25;"></circle>
+            <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style="opacity: 0.75;"></path>
+          </svg>
+          Cooldowm (${countdown}s)
+        `;
+        countdown--;
+        if (countdown < 0) {
+          clearInterval(interval);
+          checkEmailBtn.disabled = false;
+          checkEmailBtn.innerHTML = originalText;
+        }
+      }, 1000);
+    }
+
+    function renderBreachResults(breaches, isDemo = false) {
+      breachSkeleton.style.display = 'none';
+      breachesOutputGrid.style.display = breaches.length === 0 ? 'block' : 'grid';
+      breachStatusBadge.style.display = 'inline-flex';
+
+      breachTotalCountVal.innerText = breaches.length;
+      breachesOutputGrid.innerHTML = '';
+
+      if (breaches.length === 0) {
+        // Render success/clean card
+        breachesOutputGrid.innerHTML = `
+          <div class="clean-card">
+            <div class="clean-icon-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="clean-title">Zero exposures identified</div>
+            <div class="clean-desc">Your email address is not cataloged in any known breaches stored in our system archives. Continue practicing high-security guidelines to maintain identity integrity.</div>
+          </div>
+        `;
+        return;
+      }
+
+      // Populate breach cards
+      breaches.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'breach-card';
+        
+        // Parse date to clean representation
+        const dateObj = new Date(b.BreachDate);
+        const formattedDate = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        const pillsHTML = b.DataClasses.map(pill => `<span class="pill-tag">${pill}</span>`).join('');
+
+        card.innerHTML = `
+          <div class="breach-header">
+            <span class="breach-name">${b.Name}</span>
+            <span class="breach-date">BREACHED: ${formattedDate}</span>
+          </div>
+          <p class="breach-desc">${b.Description}</p>
+          <div class="breach-pills-row">
+            ${pillsHTML}
+          </div>
+        `;
+        breachesOutputGrid.appendChild(card);
+      });
+    }
+
+    function renderErrorCard(message) {
+      breachSkeleton.style.display = 'none';
+      breachesOutputGrid.style.display = 'block';
+      breachesOutputGrid.innerHTML = `
+        <div class="clean-card" style="border-top-color: var(--rose); background-color: rgba(192, 57, 43, 0.02); border-color: rgba(192, 57, 43, 0.2);">
+          <div class="clean-icon-wrapper" style="background-color: rgba(192, 57, 43, 0.1);">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="var(--rose)" style="stroke: var(--rose);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div class="clean-title" style="color: var(--rose);">Query Failed</div>
+          <div class="clean-desc">${message}</div>
+        </div>
+      `;
+    }
+
+
+    // ----------------------------------------------------
+    // TOOL 4: PASSWORD BREACH CHECKER LOGIC
+    // ----------------------------------------------------
+    const pwbPasswordInput = document.getElementById('pwb-password-input');
+    const togglePwbVisibility = document.getElementById('toggle-pwb-visibility');
+    const checkPwbBtn = document.getElementById('check-pwb-btn');
+    
+    const pwbEmptyState = document.getElementById('pwb-empty-state');
+    const pwbSkeleton = document.getElementById('pwb-skeleton');
+    const pwbResults = document.getElementById('pwb-results');
+    const pwbStatusCardContainer = document.getElementById('pwb-status-card');
+    
+    const pwbHashPrefix = document.getElementById('pwb-hash-prefix');
+    const pwbHashSuffix = document.getElementById('pwb-hash-suffix');
+    const copyHashBtn = document.getElementById('copy-hash-btn');
+
+    togglePwbVisibility.addEventListener('click', () => {
+      const type = pwbPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      pwbPasswordInput.setAttribute('type', type);
+      const icon = togglePwbVisibility.querySelector('svg');
+      if (type === 'text') {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />';
+      } else {
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.43 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />';
+      }
+    });
+
+    async function checkPasswordBreach(password) {
+      try {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+
+        const prefix = hashHex.substring(0, 5);
+        const suffix = hashHex.substring(5);
+
+        const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+        if (!response.ok) throw new Error('API request failed');
+
+        const text = await response.text();
+        const lines = text.split('\n');
+        const found = lines.find(line => line.split(':')[0].trim() === suffix);
+        const count = found ? parseInt(found.split(':')[1].trim()) : 0;
+
+        return { count, prefix, hashHex };
+      } catch (error) {
+        throw new Error('Breach check failed: ' + error.message);
+      }
+    }
+
+    checkPwbBtn.addEventListener('click', handlePasswordBreachCheck);
+
+    async function handlePasswordBreachCheck() {
+      const password = pwbPasswordInput.value;
+      if (!password) {
+        showToast("Please enter a password to verify", false);
+        return;
+      }
+
+      pwbEmptyState.style.display = 'none';
+      pwbResults.style.display = 'none';
+      pwbSkeleton.style.display = 'flex';
+
+      try {
+        const result = await checkPasswordBreach(password);
+        STATE.fullSha1Hash = result.hashHex;
+
+        // Update educational display immediately (k-anonymity masking)
+        pwbHashPrefix.innerText = result.prefix;
+        pwbHashSuffix.innerText = '•••••••••••••••••••••••••••••••••••';
+
+        renderPwbResult(result.count);
+      } catch (err) {
+        console.error(err);
+        showToast(err.message, false);
+        renderPwbError(err.message);
+      }
+    }
+
+    function renderPwbResult(count) {
+      pwbSkeleton.style.display = 'none';
+      pwbResults.style.display = 'block';
+      pwbStatusCardContainer.innerHTML = '';
+
+      const card = document.createElement('div');
+      
+      if (count > 0) {
+        // Expose breaches detected
+        card.className = 'clean-card';
+        card.style.borderTopColor = 'var(--rose)';
+        card.style.backgroundColor = 'rgba(192, 57, 43, 0.02)';
+        card.style.borderColor = 'rgba(192, 57, 43, 0.2)';
+        
+        card.innerHTML = `
+          <div class="clean-icon-wrapper" style="background-color: rgba(192, 57, 43, 0.1);">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="var(--rose)" style="stroke: var(--rose);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div class="clean-title" style="color: var(--rose);">Compromised Secret Identified</div>
+          <div class="clean-desc">This password has been exposed <strong>${count.toLocaleString()} times</strong> in public data breaches. Using this credential introduces critical spoofing vulnerability. Change it immediately.</div>
+        `;
+      } else {
+        // Safe password
+        card.className = 'clean-card';
+        card.style.borderTopColor = 'var(--sage)';
+        card.style.backgroundColor = 'var(--ivory)';
+        card.style.borderColor = 'rgba(46, 125, 82, 0.2)';
+
+        card.innerHTML = `
+          <div class="clean-icon-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="var(--sage)">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="clean-title" style="color: var(--sage);">✓ Cryptographically Uncompromised</div>
+          <div class="clean-desc">This password was not identified in any known exposed credentials archives. Our security suite confirms high statistical immunity under k-anonymity partial hashes checking.</div>
+        `;
+      }
+
+      pwbStatusCardContainer.appendChild(card);
+    }
+
+    function renderPwbError(message) {
+      pwbSkeleton.style.display = 'none';
+      pwbResults.style.display = 'block';
+      pwbStatusCardContainer.innerHTML = `
+        <div class="clean-card" style="border-top-color: var(--rose); background-color: rgba(192, 57, 43, 0.02); border-color: rgba(192, 57, 43, 0.2);">
+          <div class="clean-icon-wrapper" style="background-color: rgba(192, 57, 43, 0.1);">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="var(--rose)" style="stroke: var(--rose);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+          </div>
+          <div class="clean-title" style="color: var(--rose);">Index Query Failed</div>
+          <div class="clean-desc">${message}</div>
+        </div>
+      `;
+    }
+
+    copyHashBtn.addEventListener('click', () => {
+      if (STATE.fullSha1Hash) {
+        copyToClipboard(STATE.fullSha1Hash, "Full SHA-1 Hash");
+      } else {
+        showToast("No hash generated to copy", false);
+      }
+    });
+
+  </script>
+</body>
+</html>
